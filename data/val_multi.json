@@ -18,64 +18,83 @@
     "reasoning": "A szerződés Vállalkozó adatai között szerepel"
   },
   {
-    "question": "Milyen típusú integrációs lehetőségeket biztosít az AI rendszer?",
-    "ideal_answer": "Az integrációs dokumentum részletezi az API-alapú megoldásokat, plugin rendszereket és harmadik fél alkalmazások integrálásának lehetőségeit.",
+    "question": "Milyen időtartamban nyújt szolgáltatást a Grepton Zrt. a jelen szerződés szerint?",
+    "ideal_answer": "A szolgáltatás időtartama 2024. január 1-től 2024. március 31-ig tart.",
     "document_source": [
-      "CRA_Integrations"
+      "CRA-2023-1067_Grepton_Zrt._15-12-2023_Attachment-1_Integrations"
     ],
     "has_answer": true,
-    "reasoning": "Az Integrations PDF az integrációs megoldások teljes spektrumát tartalmazza"
+    "reasoning": "Az Engagement Details részben szerepel a Commencement Date és az End Date, amelyek meghatározzák a szolgáltatás időtartamát."
   },
   {
-    "question": "Mi az alvállalkozói módosítás célja az INNOVITECH Sprint Team projektben?",
-    "ideal_answer": "Az alvállalkozói módosítás a projektcsapat összetételét és a munkaköri felelősségeket pontosítja és standardizálja.",
+    "question": "Mekkora az óradíja a Grepton Zrt. által biztosított fejlesztői erőforrásoknak, és hány fő vesz részt a projektben?",
+    "ideal_answer": "Az óradíj 52,25 EUR/óra, és két fő vesz részt a projektben (Ráksi Róbert és Kánai István).",
     "document_source": [
-      "GRE_INNOVITECH_Sprint"
+      "CRA-2023-1067_Grepton_Zrt._15-12-2023_Attachment-1_Integrations"
     ],
     "has_answer": true,
-    "reasoning": "A DOCX dokumentum az alvállalkozó módosítások részleteit tartalmazza"
+    "reasoning": "A Contractor Details táblázat tartalmazza a résztvevő személyek nevét és az egységesen megadott óradíjat."
   },
   {
-    "question": "A Grepton Zrt. milyen szerepet játszik a különböző projektekben és megállapodásokban?",
-    "ideal_answer": "Grepton Zrt. a Megrendelő szerepében jelenik meg az alvállalkozói szerződésben, valamint részt vesz az AI integrációs projektekben és az INNOVITECH Sprint Team kezdeményezésben.",
+    "question": "Mikortól lép hatályba a Grepton Zrt. és az InnovITech Kft. közötti szerződés 3. módosítása?",
+    "ideal_answer": "A szerződés 3. módosítása 2024. január 1-jétől lép hatályba.",
     "document_source": [
-      "Grepton_Konzorcia_SmartComm",
-      "CRA_Integrations",
-      "GRE_INNOVITECH_Sprint"
+      "GRE_INNOVITECH_Sprint_Team_Alvallalkozoi_modositas_3"
     ],
     "has_answer": true,
-    "reasoning": "Grepton Zrt. több dokumentumban is szerepel, de különböző kontextusban"
+    "reasoning": "A dokumentum A módosuló szerződés című részében egyértelműen rögzítésre kerül, hogy a módosítás a Felek egybehangzó akaratával 2024.01.01-től lép hatályba."
   },
   {
-    "question": "Hogyan jelenik meg az alvállalkozási forma a szervezetek között az összes dokumentumban?",
-    "ideal_answer": "Az alvállalkozási forma szerződési alapon, egyértelműen definiált felelősségekkel és munkaköri kötelezettségekkel valósul meg, amit az alvállalkozói szerződés és módosítási dokumentumok rögzítenek.",
+    "question": "Milyen elszámolási díjazást alkalmaznak a módosított szerződés szerint a fejlesztői erőforrások biztosítására?",
+    "ideal_answer": "Az elszámolás napidíjas alapon történik: 1 fő fejlesztő biztosítása 103.000 Ft + ÁFA/embernap, opcionálisan további fejlesztők 15.000 Ft + ÁFA/óra díjazással.",
     "document_source": [
-      "Grepton_Konzorcia_SmartComm",
-      "GRE_INNOVITECH_Sprint"
+      "GRE_INNOVITECH_Sprint_Team_Alvallalkozoi_modositas_3"
     ],
     "has_answer": true,
-    "reasoning": "Mind az alvállalkozói szerződés, mind a Sprint Team módosítás az alvállalkozási kapcsolatokat definiálja"
+    "reasoning": "A Módosítás tárgya fejezetben, a vállalkozói díj összegére és esedékességére vonatkozó pont részletesen tartalmazza az új díjazási struktúrát."
   },
   {
-    "question": "Milyen kapcsolat létezik a technikai integrációs megoldások és a szervezeti partnerségi szerkezet között?",
-    "ideal_answer": "A technikai integrációs megoldások (API-k, pluginek) támogatják az alvállalkozó szervezetek közötti kommunikációt és adatcserét, amelyek az alvállalkozói szerződéseknek megfelelően kezelik a szellemi tulajdon és biztonsági kérdéseket.",
+    "question": "Milyen szerepkörben jelenik meg a Grepton Zrt. a SmartComms-hez kapcsolódó szerződésekben, és milyen típusú szolgáltatásokat nyújt ezek alapján?",
+    "ideal_answer": "A Grepton Zrt. a SmartComms-hez kapcsolódó dokumentumokban szolgáltatóként és megrendelőként is megjelenik: fejlesztési és integrációs szolgáltatásokat nyújt a SmartComms SC Ltd. számára, valamint alvállalkozókat von be a feladatok ellátásához.",
     "document_source": [
-      "CRA_Integrations",
-      "Grepton_Konzorcia_SmartComm",
-      "GRE_INNOVITECH_Sprint"
+      "CRA-2023-1067_Grepton_Zrt._15-12-2023_Attachment-1_Integrations",
+      "GRE_INNOVITECH_Sprint_Team_Alvallalkozoi_modositas_3",
+      "Grepton_Konzorcia_SmartComm_módosítás_20240527"
     ],
     "has_answer": true,
-    "reasoning": "Az integrációs dokumentum technikai megoldásokat ír le, amelyeket az alvállalkozási szerződések jogi keretei szabályoznak"
+    "reasoning": "Az egyik dokumentum közvetlen szolgáltatást rögzít a SmartComms felé, a másik alvállalkozói bevonást, a harmadik pedig a SmartComm kapcsolódást erősíti meg."
   },
   {
-    "question": "Milyen koordinációs kihívások merülhetnek fel több alvállalkozó és technikai integráció esetén?",
-    "ideal_answer": "A koordinációs kihívások közé tartozik a kommunikációs protokollok standardizálása, az integrációs pontok kezelése, és a szervezeti felelősségek tisztázása különböző szerződési kereteken belül.",
+    "question": "Hogyan biztosítja a Grepton Zrt. a SmartComms számára szükséges fejlesztői kapacitást a különböző szerződések alapján?",
+    "ideal_answer": "A Grepton Zrt. egyrészt saját fejlesztői erőforrásokat biztosít a SmartComms SC Ltd. számára, másrészt alvállalkozók (például InnovITech Kft.) bevonásával egészíti ki a szükséges fejlesztői kapacitást.",
     "document_source": [
-      "GRE_INNOVITECH_Sprint",
-      "CRA_Integrations",
-      "Grepton_Konzorcia_SmartComm"
+      "CRA-2023-1067_Grepton_Zrt._15-12-2023_Attachment-1_Integrations",
+      "GRE_INNOVITECH_Sprint_Team_Alvallalkozoi_modositas_3",
+      "Grepton_Konzorcia_SmartComm_módosítás_20240527"
     ],
     "has_answer": true,
-    "reasoning": "Az összes dokumentum egyes aspektusait érinti a több-szervezeti koordináció"
+    "reasoning": "Az egyik dokumentum saját erőforrásokat, a másik alvállalkozói fejlesztőket rögzít a SmartComms-hez kapcsolódó munkákra."
+  },
+  {
+    "question": "Milyen konkrét technológiai stack-et (programozási nyelvek, frameworkök) használnak a SmartComms számára végzett fejlesztések során?",
+    "ideal_answer": "Nem található válasz a kérdésre, az rendelkezésre álló dokumentumok között.",
+    "document_source": [
+      "CRA-2023-1067_Grepton_Zrt._15-12-2023_Attachment-1_Integrations",
+      "GRE_INNOVITECH_Sprint_Team_Alvallalkozoi_modositas_3",
+      "Grepton_Konzorcia_SmartComm_módosítás_20240527"
+    ],
+    "has_answer": false,
+    "reasoning": "A dokumentumok csak szerződéses és pénzügyi kereteket tartalmaznak, technológiai részleteket nem."
+  },
+  {
+    "question": "Milyen jogkövetkezményekkel jár a szerződések megszegése esetén a Grepton Zrt. részéről alkalmazható kötbér vagy kártérítés mértéke?",
+    "ideal_answer": "Nem található válasz a kérdésre, az rendelkezésre álló dokumentumok között.",
+    "document_source": [
+      "CRA-2023-1067_Grepton_Zrt._15-12-2023_Attachment-1_Integrations",
+      "GRE_INNOVITECH_Sprint_Team_Alvallalkozoi_modositas_3",
+      "Grepton_Konzorcia_SmartComm_módosítás_20240527"
+    ],
+    "has_answer": false,
+    "reasoning": "A dokumentumok nem tartalmaznak kötbérre vagy kártérítési mértékre vonatkozó rendelkezéseket."
   }
 ]
