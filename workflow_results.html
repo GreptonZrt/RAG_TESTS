@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Workflow Evaluation Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .metric-card {
+            background: #f5f7fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .metric-value {
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .workflow-id {
+            font-weight: bold;
+            color: #667eea;
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #999;
+        }
+        .comparison {
+            margin-top: 30px;
+        }
+        .comparison h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .chart {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 5px;
+        }
+        .workflow-row {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .workflow-name {
+            width: 200px;
+            font-weight: bold;
+            color: #333;
+        }
+        .bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 30px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            min-width: 40px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 RAG Workflow Evaluation Report</h1>
+        
+        <div class="summary">
+            <div class="metric-card">
+                <div class="metric-label">Total Workflows</div>
+                <div class="metric-value">5</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Last Update</div>
+                <div class="metric-value">10:29:56</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Report Date</div>
+                <div class="metric-value">2025-12-16</div>
+            </div>
+        </div>
+        
+        <h2>📊 Detailed Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Workflow</th>
+                    <th>ID</th>
+                    <th>Queries</th>
+                    <th>Avg Chunks</th>
+                    <th>Avg Response Len</th>
+                    <th>Avg Utility</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Feedback Loop RAG</td>
+                    <td class="workflow-id">11</td>
+                    <td>2</td>
+                    <td>5.0</td>
+                    <td>0</td>
+                    <td></td>
+                    <td class="timestamp">2025-12-16 10:25:11</td>
+                </tr>
+                <tr>
+                    <td>Adaptive RAG</td>
+                    <td class="workflow-id">12</td>
+                    <td>1</td>
+                    <td>3.0</td>
+                    <td>97</td>
+                    <td></td>
+                    <td class="timestamp">2025-12-16 10:25:57</td>
+                </tr>
+                <tr>
+                    <td>Self-RAG</td>
+                    <td class="workflow-id">13</td>
+                    <td>1</td>
+                    <td>2.0</td>
+                    <td>0</td>
+                    <td>5.00</td>
+                    <td class="timestamp">2025-12-16 10:26:46</td>
+                </tr>
+                <tr>
+                    <td>Proposition Chunking RAG</td>
+                    <td class="workflow-id">14</td>
+                    <td>1</td>
+                    <td>0.0</td>
+                    <td>97</td>
+                    <td></td>
+                    <td class="timestamp">2025-12-16 10:28:53</td>
+                </tr>
+                <tr>
+                    <td>HyDE RAG</td>
+                    <td class="workflow-id">19</td>
+                    <td>1</td>
+                    <td>2.0</td>
+                    <td>85</td>
+                    <td></td>
+                    <td class="timestamp">2025-12-16 10:29:16</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="comparison">
+            <h2>📈 Comparison: Average Chunks Retrieved</h2>
+            <div class="chart">
+                <div class="workflow-row">
+                    <div class="workflow-name">[11] Feedback Loop RAG</div>
+                    <div class="bar" style="width: 100.0%; min-width: 100px;">
+                        5.0
+                    </div>
+                </div>
+                <div class="workflow-row">
+                    <div class="workflow-name">[12] Adaptive RAG</div>
+                    <div class="bar" style="width: 60.0%; min-width: 100px;">
+                        3.0
+                    </div>
+                </div>
+                <div class="workflow-row">
+                    <div class="workflow-name">[13] Self-RAG</div>
+                    <div class="bar" style="width: 40.0%; min-width: 100px;">
+                        2.0
+                    </div>
+                </div>
+                <div class="workflow-row">
+                    <div class="workflow-name">[14] Proposition Chunking RAG</div>
+                    <div class="bar" style="width: 0.0%; min-width: 100px;">
+                        0.0
+                    </div>
+                </div>
+                <div class="workflow-row">
+                    <div class="workflow-name">[19] HyDE RAG</div>
+                    <div class="bar" style="width: 40.0%; min-width: 100px;">
+                        2.0
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Generated on 2025-12-16 10:29:56</p>
+            <p>Workflow results are automatically saved and overwritten on each run.</p>
+        </div>
+    </div>
+</body>
+</html>

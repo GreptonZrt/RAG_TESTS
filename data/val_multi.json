@@ -1,0 +1,81 @@
+[
+  {
+    "question": "Melyek a Grepton Zrt. székhelye és cégjegyzékszáma az alvállalkozói szerződésben?",
+    "ideal_answer": "Grepton Zrt. székhelye: 1087 Budapest, Kényves Kalman krt 48-52. Cégjegyzékszám: 01-10-044561",
+    "document_source": [
+      "Grepton_Konzorcia_SmartComm"
+    ],
+    "has_answer": true,
+    "reasoning": "Az alvállalkozói szerződés első részén szerepelnek a Megrendelő adatai"
+  },
+  {
+    "question": "Mi a Konzorcia Kft. bankszámlaszáma és mi a cégjegyzékszáma?",
+    "ideal_answer": "Bankszámlaszám: 12010721-01896479-00100005, Cégjegyzékszám: 01-09-703816",
+    "document_source": [
+      "Grepton_Konzorcia_SmartComm"
+    ],
+    "has_answer": true,
+    "reasoning": "A szerződés Vállalkozó adatai között szerepel"
+  },
+  {
+    "question": "Milyen típusú integrációs lehetőségeket biztosít az AI rendszer?",
+    "ideal_answer": "Az integrációs dokumentum részletezi az API-alapú megoldásokat, plugin rendszereket és harmadik fél alkalmazások integrálásának lehetőségeit.",
+    "document_source": [
+      "CRA_Integrations"
+    ],
+    "has_answer": true,
+    "reasoning": "Az Integrations PDF az integrációs megoldások teljes spektrumát tartalmazza"
+  },
+  {
+    "question": "Mi az alvállalkozói módosítás célja az INNOVITECH Sprint Team projektben?",
+    "ideal_answer": "Az alvállalkozói módosítás a projektcsapat összetételét és a munkaköri felelősségeket pontosítja és standardizálja.",
+    "document_source": [
+      "GRE_INNOVITECH_Sprint"
+    ],
+    "has_answer": true,
+    "reasoning": "A DOCX dokumentum az alvállalkozó módosítások részleteit tartalmazza"
+  },
+  {
+    "question": "A Grepton Zrt. milyen szerepet játszik a különböző projektekben és megállapodásokban?",
+    "ideal_answer": "Grepton Zrt. a Megrendelő szerepében jelenik meg az alvállalkozói szerződésben, valamint részt vesz az AI integrációs projektekben és az INNOVITECH Sprint Team kezdeményezésben.",
+    "document_source": [
+      "Grepton_Konzorcia_SmartComm",
+      "CRA_Integrations",
+      "GRE_INNOVITECH_Sprint"
+    ],
+    "has_answer": true,
+    "reasoning": "Grepton Zrt. több dokumentumban is szerepel, de különböző kontextusban"
+  },
+  {
+    "question": "Hogyan jelenik meg az alvállalkozási forma a szervezetek között az összes dokumentumban?",
+    "ideal_answer": "Az alvállalkozási forma szerződési alapon, egyértelműen definiált felelősségekkel és munkaköri kötelezettségekkel valósul meg, amit az alvállalkozói szerződés és módosítási dokumentumok rögzítenek.",
+    "document_source": [
+      "Grepton_Konzorcia_SmartComm",
+      "GRE_INNOVITECH_Sprint"
+    ],
+    "has_answer": true,
+    "reasoning": "Mind az alvállalkozói szerződés, mind a Sprint Team módosítás az alvállalkozási kapcsolatokat definiálja"
+  },
+  {
+    "question": "Milyen kapcsolat létezik a technikai integrációs megoldások és a szervezeti partnerségi szerkezet között?",
+    "ideal_answer": "A technikai integrációs megoldások (API-k, pluginek) támogatják az alvállalkozó szervezetek közötti kommunikációt és adatcserét, amelyek az alvállalkozói szerződéseknek megfelelően kezelik a szellemi tulajdon és biztonsági kérdéseket.",
+    "document_source": [
+      "CRA_Integrations",
+      "Grepton_Konzorcia_SmartComm",
+      "GRE_INNOVITECH_Sprint"
+    ],
+    "has_answer": true,
+    "reasoning": "Az integrációs dokumentum technikai megoldásokat ír le, amelyeket az alvállalkozási szerződések jogi keretei szabályoznak"
+  },
+  {
+    "question": "Milyen koordinációs kihívások merülhetnek fel több alvállalkozó és technikai integráció esetén?",
+    "ideal_answer": "A koordinációs kihívások közé tartozik a kommunikációs protokollok standardizálása, az integrációs pontok kezelése, és a szervezeti felelősségek tisztázása különböző szerződési kereteken belül.",
+    "document_source": [
+      "GRE_INNOVITECH_Sprint",
+      "CRA_Integrations",
+      "Grepton_Konzorcia_SmartComm"
+    ],
+    "has_answer": true,
+    "reasoning": "Az összes dokumentum egyes aspektusait érinti a több-szervezeti koordináció"
+  }
+]
