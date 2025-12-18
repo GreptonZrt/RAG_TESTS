@@ -134,11 +134,3 @@ Mindegyik támogatja a `--max N` flag-et a query-k számához.
 python print_results.py
 
 # CSV fájl: workflow_results.csv
-```
-
----
-
-## 🎉 Kész!
-
-Az összes workflow működik. Fedezd fel őket!
-
