@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "C:\Users\jfeher\VSCodes\RAG_tests\workflows\16_fusion_rag.py", line 29, in <module>
+    from workflow_parts.fusion_retrieval import (
+  File "C:\Users\jfeher\VSCodes\RAG_tests\workflow_parts\fusion_retrieval.py", line 10, in <module>
+    from sklearn.metrics.pairwise import cosine_similarity
+ModuleNotFoundError: No module named 'sklearn'

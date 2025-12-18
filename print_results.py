@@ -85,8 +85,15 @@ def print_results_table(csv_file: str = "workflow_results.csv"):
         except:
             avg_utility = '-'
         
-        # Medal/ranking emoji
-        medal = "🥇" if idx == 1 else ("🥈" if idx == 2 else ("🥉" if idx == 3 else f"{idx}. "))
+        # Medal/ranking emoji (use ASCII fallback for PowerShell compatibility)
+        if idx == 1:
+            medal = "[1]"
+        elif idx == 2:
+            medal = "[2]"
+        elif idx == 3:
+            medal = "[3]"
+        else:
+            medal = f"{idx}. "
         
         print(f"{medal:<5} | {wf_id:<5} | {wf_name:<25} | {overall_score:<15} | {valid_rate:<10} | {str(queries):<8} | {avg_chunks:<8} | {avg_utility:<8}")
     

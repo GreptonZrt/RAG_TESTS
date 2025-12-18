@@ -2,7 +2,7 @@
 """
 Batch runner for all RAG workflows with centralized results comparison
 
-Runs all 12 workflows sequentially and displays a comprehensive comparison at the end.
+Runs all 13 workflows sequentially with val_multi.json validation data.
 """
 import subprocess
 import sys
@@ -20,18 +20,27 @@ workflows = [
     ("12_adaptive_rag", "12"),
     ("13_self_rag", "13"),
     ("14_proposition_chunking_rag", "14"),
+    ("16_fusion_rag", "16"),
     ("19_hyde_rag", "19"),
 ]
 
-def run_workflow(workflow_name, num_queries=3):
+def run_workflow(workflow_name, num_queries=999):
     """Run a single workflow with specified number of queries."""
     try:
+        import os
+        env = os.environ.copy()
+        # Use the venv python directly
+        venv_python = Path(__file__).parent / ".venv" / "Scripts" / "python.exe"
+        if not venv_python.exists():
+            venv_python = sys.executable
+        
         result = subprocess.run(
-            [sys.executable, f"workflows/{workflow_name}.py", "--max", str(num_queries), "--no-eval"],
+            [str(venv_python), f"workflows/{workflow_name}.py", "--max", str(num_queries), "--no-eval"],
             capture_output=True,
-            timeout=120,
+            timeout=300,
             cwd=Path(__file__).parent,
-            text=True
+            text=True,
+            env=env
         )
         return result.returncode == 0, result.stdout, result.stderr
     except subprocess.TimeoutExpired:
@@ -43,17 +52,29 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(description="Batch run all RAG workflows")
-    parser.add_argument("--max", type=int, default=3, help="Max queries per workflow (default: 3)")
+    parser.add_argument("--max", type=int, default=10, help="Max queries per workflow (default: 10)")
+    parser.add_argument("--run", type=str, default=None, help="Specific workflows to run (comma-separated IDs, e.g., '01,04,12')")
     parser.add_argument("--silent", action="store_true", help="Suppress individual workflow output")
     args = parser.parse_args()
+    
+    # Filter workflows if --run is specified
+    workflows_to_run = workflows
+    if args.run:
+        requested_ids = [id.strip() for id in args.run.split(",")]
+        workflows_to_run = [wf for wf in workflows if wf[1] in requested_ids]
+        if not workflows_to_run:
+            available_ids = ", ".join([wf[1] for wf in workflows])
+            print(f"\nError: No workflows found matching IDs: {requested_ids}")
+            print(f"Available workflow IDs: {available_ids}\n")
+            sys.exit(1)
     
     print("\n" + "="*80)
     print("BATCH RUNNER - All RAG Workflows".center(80))
     print("="*80)
-    print(f"\nRunning {len(workflows)} workflows with {args.max} queries each...\n")
+    print(f"\nRunning {len(workflows_to_run)} workflows with {args.max} queries each (val_multi.json)...\n")
     
     results = {}
-    for workflow_name, workflow_id in workflows:
+    for workflow_name, workflow_id in workflows_to_run:
         status_str = f"[{workflow_id}] {workflow_name}"
         print(f"Running {status_str}...", end=" ", flush=True)
         
@@ -70,15 +91,33 @@ def main():
         else:
             print("[FAILED]")
             results[workflow_id] = "FAILED"
+            # Save full error to file for debugging
             if stderr:
-                print(f"  Error: {stderr[:100]}")
+                error_file = Path(__file__).parent / f"error_debug_{workflow_id}.txt"
+                error_file.write_text(stderr)
+                # Print first 500 chars
+                error_preview = stderr[:500] if len(stderr) > 500 else stderr
+                print(f"  Error (first 500 chars): {error_preview}")
+                print(f"  (Full error saved to: {error_file.name})")
+                if "TIMEOUT" in stderr:
+                    print(f"  (Workflow took too long, try increasing timeout)")
+            if stdout:
+                # Show last few lines of stdout if available
+                stdout_lines = stdout.split('\n')
+                last_lines = [l for l in stdout_lines if l.strip()][-3:]
+                if last_lines:
+                    print(f"  Last output: {last_lines[-1][:100]}")
     
-    # Print comprehensive comparison
-    print("\n" + "="*80)
-    print("COMPREHENSIVE RESULTS COMPARISON".center(80))
-    print("="*80)
-    
-    subprocess.run([sys.executable, "print_results.py"], cwd=Path(__file__).parent)
+    # Print comprehensive comparison (only if any succeeded)
+    if any(v == "OK" for v in results.values()):
+        print("\n" + "="*80)
+        print("COMPREHENSIVE RESULTS COMPARISON".center(80))
+        print("="*80)
+        
+        try:
+            subprocess.run([sys.executable, "print_results.py"], cwd=Path(__file__).parent)
+        except Exception as e:
+            print(f"Note: Could not display results comparison: {e}")
     
     # Summary
     print("\n" + "="*80)
@@ -86,7 +125,7 @@ def main():
     print("="*80)
     ok_count = sum(1 for v in results.values() if v == "OK")
     failed_count = sum(1 for v in results.values() if v == "FAILED")
-    print(f"Completed: {ok_count}/{len(workflows)}")
+    print(f"Completed: {ok_count}/{len(workflows_to_run)}")
     if failed_count > 0:
         print(f"Failed: {failed_count}")
         failed_wfs = [wf_id for wf_id, status in results.items() if status == "FAILED"]
