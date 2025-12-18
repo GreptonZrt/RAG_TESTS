@@ -11,6 +11,7 @@ Implements self-reflective retrieval-augmented generation:
 
 import sys
 import os
+import time
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
@@ -23,6 +24,7 @@ load_dotenv()
 from workflow_parts.orchestration import discover_documents
 from workflow_parts.data_loading import load_validation_data, load_multiple_files
 from workflow_parts.self_rag import self_rag_orchestrate
+from workflow_parts.output_formatter import UnifiedSummaryFormatter
 from workflow_parts.embedding import get_embedding_fn
 from workflow_parts.results_tracker import ResultsTracker, create_metrics_from_results
 
@@ -80,6 +82,7 @@ def create_response_generation_fn():
 
 def main():
     """Main workflow execution."""
+    start_time = time.time()
     parser = argparse.ArgumentParser(description="Workflow 13: Self-RAG")
     parser.add_argument("--data-dir", default="data", help="Data directory")
     parser.add_argument("--max", type=int, default=None, help="Max queries to process")
@@ -87,6 +90,7 @@ def main():
                        help="Validation file name")
     parser.add_argument("--no-eval", action="store_true", help="Skip evaluation")
     parser.add_argument("--use-ocr", action="store_true", help="Use OCR for PDFs")
+    parser.add_argument("--batch", action="store_true", help="Batch mode (minimal output)")
     
     args = parser.parse_args()
     
@@ -166,37 +170,7 @@ def main():
             "iterations": result['metadata'].get('iterations', 0) if result['metadata'] else 0
         })
     
-    # Print summary
-    print(f"\n{'='*70}")
-    print("SUMMARY")
-    print(f"{'='*70}")
-    print(f"Processed: {len(results)}/{num_queries} queries successfully")
-    
-    if results:
-        # Statistics
-        retrieval_needed_count = sum(1 for r in results if r['retrieval_needed'])
-        print(f"\nRetrieval Statistics:")
-        print(f"  Queries needing retrieval: {retrieval_needed_count}/{len(results)}")
-        
-        # Support levels
-        support_levels = {}
-        for r in results:
-            level = r['support_level']
-            support_levels[level] = support_levels.get(level, 0) + 1
-        
-        print(f"\nSupport Levels:")
-        for level, count in sorted(support_levels.items()):
-            print(f"  {level}: {count}")
-        
-        # Average utility
-        avg_utility = sum(r['utility_rating'] for r in results) / len(results)
-        print(f"\nAverage Utility Rating: {avg_utility:.2f}/5.0")
-        
-        # Iteration statistics
-        avg_iterations = sum(r['iterations'] for r in results) / len(results)
-        print(f"Average Iterations: {avg_iterations:.1f}")
-    
-    # Save results to tracker
+    # Save results to tracker and calculate metrics
     metrics = create_metrics_from_results(results)
     tracker = ResultsTracker()
     tracker.add_result(
@@ -206,11 +180,17 @@ def main():
     )
     tracker.save_results()
     
-    # Print workflow metrics only
-    print(f"\n[Workflow 13] Self-RAG")
-    print(f"  Overall Score: {metrics.get('overall_score', '-'):.1f}/100")
-    print(f"  Valid Response Rate: {metrics.get('valid_response_rate', '-'):.1f}%")
-    print(f"  Queries Processed: {metrics.get('queries_processed', '-')}")
+    # Calculate execution time
+    total_time = time.time() - start_time
+    
+    # Print unified summary with only essential metrics
+    summary_formatter = UnifiedSummaryFormatter("Self-RAG", 13)
+    summary = summary_formatter.format_summary(
+        queries_processed=len(results),
+        total_time=total_time,
+        metrics=metrics
+    )
+    print(summary)
 
 
 if __name__ == "__main__":

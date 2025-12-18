@@ -8,7 +8,7 @@ workflows = ["01_simple_rag", "02_semantic_chunking", "04_context_enriched_rag",
              "05_contextual_chunk_headers_rag", "06_doc_augmentation_rag", 
              "08_reranker", "10_contextual_compression",
              "11_feedback_loop_rag", "12_adaptive_rag", "13_self_rag",
-             "14_proposition_chunking_rag", "19_hyde_rag"]
+             "14_proposition_chunking_rag", "16_fusion_rag", "19_hyde_rag"]
 
 print("\n" + "="*70)
 print("TESTING ALL WORKFLOWS FOR RESULTS TRACKING")
@@ -19,7 +19,7 @@ for wf in workflows:
     print(f"Testing {wf}...", end=" ", flush=True)
     try:
         result = subprocess.run(
-            [sys.executable, f"workflows/{wf}.py", "--max", "1", "--no-eval"],
+            [sys.executable, f"workflows/{wf}.py", "--max", "1", "--no-eval", "--batch"],
             capture_output=True,
             timeout=60,
             cwd=Path(__file__).parent

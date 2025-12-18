@@ -12,6 +12,7 @@ Usage:
 
 import sys
 import os
+import time
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -31,6 +32,7 @@ from workflow_parts.embedding import get_embedding_fn
 from workflow_parts.generation import generate_response, get_generation_client
 from workflow_parts.retrieval import semantic_search
 from workflow_parts.reranking import rerank_with_llm, rerank_by_keyword_matching
+from workflow_parts.output_formatter import UnifiedSummaryFormatter
 from workflow_parts.results_tracker import ResultsTracker, create_metrics_from_results
 
 
@@ -115,6 +117,7 @@ def create_reranking_retriever(
 
 def main():
     """Main entry point for workflow 08."""
+    start_time = time.time()
     
     parser = argparse.ArgumentParser(
         description="Reranker RAG Workflow",
@@ -142,6 +145,7 @@ Examples:
                         help="Run a single custom query")
     parser.add_argument("--use-ocr", action="store_true",
                         help="Force OCR for PDF extraction")
+    parser.add_argument("--batch", action="store_true", help="Batch mode (minimal output)")
     
     args = parser.parse_args()
     
@@ -200,17 +204,23 @@ Examples:
         
         print_results(results)
         
-        # Track results
+        # Track results and calculate metrics
         metrics = create_metrics_from_results(results)
         tracker = ResultsTracker()
         tracker.add_result(workflow_id="08", workflow_name="Reranker RAG", metrics=metrics)
         tracker.save_results()
         
-        # Print workflow metrics only
-        print(f"\n[Workflow 08] Reranker RAG")
-        print(f"  Overall Score: {metrics.get('overall_score', '-'):.1f}/100")
-        print(f"  Valid Response Rate: {metrics.get('valid_response_rate', '-'):.1f}%")
-        print(f"  Queries Processed: {metrics.get('queries_processed', '-')}")
+        # Calculate execution time
+        total_time = time.time() - start_time
+        
+        # Print unified summary with only essential metrics
+        summary_formatter = UnifiedSummaryFormatter("Reranker RAG", 8)
+        summary = summary_formatter.format_summary(
+            queries_processed=len(results),
+            total_time=total_time,
+            metrics=metrics
+        )
+        print(summary)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ Implements retrieval with feedback-based adjustment:
 import sys
 import os
 import json
+import time
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
@@ -26,15 +27,15 @@ from workflow_parts.feedback_loop import (
 )
 from workflow_parts.generation import generate_response
 from workflow_parts.embedding import get_embedding_fn
+from workflow_parts.output_formatter import UnifiedSummaryFormatter
 from workflow_parts.results_tracker import ResultsTracker, create_metrics_from_results
-from workflow_parts.embedding import get_embedding_fn
-from workflow_parts.generation import generate_response
 
 
 
 
 def main():
     """Main workflow execution."""
+    start_time = time.time()
     parser = argparse.ArgumentParser(description="Workflow 11: Feedback Loop RAG")
     parser.add_argument("--data-dir", default="data", help="Data directory")
     parser.add_argument("--max", type=int, default=None, help="Max queries to process")
@@ -44,6 +45,7 @@ def main():
     parser.add_argument("--use-ocr", action="store_true", help="Use OCR for PDFs")
     parser.add_argument("--num-feedbacks", type=int, default=1,
                        help="Number of feedback iterations")
+    parser.add_argument("--batch", action="store_true", help="Batch mode (minimal output)")
     
     args = parser.parse_args()
     
@@ -138,27 +140,7 @@ def main():
             "feedback_count": args.num_feedbacks
         })
     
-    # Print summary
-    print(f"\n{'='*70}")
-    print("SUMMARY")
-    print(f"{'='*70}")
-    print(f"Processed: {len(feedback_results)}/{num_queries} queries successfully")
-    print(f"Total feedback entries: {len(feedback_store.feedback_history)}")
-    print(f"Chunks with feedback: {len(feedback_store.chunk_feedback_count)}")
-    
-    # Print top-scored chunks based on feedback
-    if feedback_store.chunk_relevance_scores:
-        print(f"\nTop chunks by feedback score:")
-        chunk_scores = []
-        for chunk_key, scores in feedback_store.chunk_relevance_scores.items():
-            avg_score = sum(scores) / len(scores)
-            chunk_scores.append((chunk_key, avg_score, len(scores)))
-        
-        chunk_scores.sort(key=lambda x: x[1], reverse=True)
-        for i, (chunk_key, score, count) in enumerate(chunk_scores[:5], 1):
-            print(f"  [{i}] Score: {score:.2f}, Feedbacks: {count}")
-    
-    # Save results to tracker
+    # Save results to tracker and calculate metrics
     metrics = create_metrics_from_results(feedback_results)
     tracker = ResultsTracker()
     tracker.add_result(
@@ -168,11 +150,17 @@ def main():
     )
     tracker.save_results()
     
-    # Print workflow metrics only
-    print(f"\n[Workflow 11] Feedback Loop RAG")
-    print(f"  Overall Score: {metrics.get('overall_score', '-'):.1f}/100")
-    print(f"  Valid Response Rate: {metrics.get('valid_response_rate', '-'):.1f}%")
-    print(f"  Queries Processed: {metrics.get('queries_processed', '-')}")
+    # Calculate execution time
+    total_time = time.time() - start_time
+    
+    # Print unified summary with only essential metrics
+    summary_formatter = UnifiedSummaryFormatter("Feedback Loop RAG", 11)
+    summary = summary_formatter.format_summary(
+        queries_processed=len(feedback_results),
+        total_time=total_time,
+        metrics=metrics
+    )
+    print(summary)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ Implements HyDE retrieval strategy:
 
 import sys
 import os
+import time
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
@@ -24,6 +25,7 @@ from workflow_parts.data_loading import load_validation_data, load_multiple_file
 from workflow_parts.generation import generate_response, get_generation_client
 from workflow_parts.hyde_rag import generate_hypothetical_document, hyde_retrieve, compare_hyde_and_standard
 from workflow_parts.embedding import get_embedding_fn
+from workflow_parts.output_formatter import UnifiedSummaryFormatter
 from workflow_parts.results_tracker import ResultsTracker, create_metrics_from_results
 
 
@@ -54,6 +56,7 @@ def create_generation_fn():
 
 def main():
     """Main workflow execution."""
+    start_time = time.time()
     parser = argparse.ArgumentParser(description="Workflow 19: HyDE RAG")
     parser.add_argument("--data-dir", default="data", help="Data directory")
     parser.add_argument("--max", type=int, default=None, help="Max queries to process")
@@ -63,6 +66,7 @@ def main():
     parser.add_argument("--use-ocr", action="store_true", help="Use OCR for PDFs")
     parser.add_argument("--compare", action="store_true", 
                        help="Compare HyDE vs standard RAG")
+    parser.add_argument("--batch", action="store_true", help="Batch mode (minimal output)")
     
     args = parser.parse_args()
     
@@ -155,25 +159,11 @@ def main():
             "comparison_mode": args.compare
         })
     
-    # Print summary
-    print(f"\n{'='*70}")
-    print("SUMMARY")
-    print(f"{'='*70}")
-    print(f"Processed: {len(results)}/{num_queries} queries successfully")
+    # Calculate execution time and metrics
+    total_time = time.time() - start_time
+    metrics = create_metrics_from_results(results) if results else {}
     
-    if args.compare:
-        print("Mode: HyDE vs Standard Comparison")
-    else:
-        print("Mode: HyDE Retrieval")
-    
-    if results:
-        avg_hyp_doc_len = sum(r['hypothetical_doc_length'] for r in results) / len(results)
-        avg_chunks = sum(r['chunks_count'] for r in results) / len(results)
-        print(f"\nAverage hypothetical document length: {avg_hyp_doc_len:.0f} chars")
-        print(f"Average chunks retrieved: {avg_chunks:.1f}")
-    
-    # Save results to tracker
-    metrics = create_metrics_from_results(results)
+    # Track results
     tracker = ResultsTracker()
     tracker.add_result(
         workflow_id="19",
@@ -182,11 +172,14 @@ def main():
     )
     tracker.save_results()
     
-    # Print workflow metrics only
-    print(f"\n[Workflow 19] HyDE RAG")
-    print(f"  Overall Score: {metrics.get('overall_score', '-'):.1f}/100")
-    print(f"  Valid Response Rate: {metrics.get('valid_response_rate', '-'):.1f}%")
-    print(f"  Queries Processed: {metrics.get('queries_processed', '-')}")
+    # Print unified summary with only essential metrics
+    summary_formatter = UnifiedSummaryFormatter("HyDE RAG", 19)
+    summary = summary_formatter.format_summary(
+        queries_processed=len(results),
+        total_time=total_time,
+        metrics=metrics
+    )
+    print(summary)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ Implements fine-grained retrieval using atomic propositions:
 
 import sys
 import os
+import time
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
@@ -26,6 +27,7 @@ from workflow_parts.proposition_chunking import (
     create_proposition_index, retrieve_propositions_only, retrieve_with_propositions
 )
 from workflow_parts.embedding import get_embedding_fn
+from workflow_parts.output_formatter import ConsoleLogger, UnifiedSummaryFormatter
 from workflow_parts.results_tracker import ResultsTracker, create_metrics_from_results
 
 
@@ -56,6 +58,7 @@ def create_generation_fn():
 
 def main():
     """Main workflow execution."""
+    start_time = time.time()
     parser = argparse.ArgumentParser(description="Workflow 14: Proposition Chunking RAG")
     parser.add_argument("--data-dir", default="data", help="Data directory")
     parser.add_argument("--max", type=int, default=None, help="Max queries to process")
@@ -63,10 +66,14 @@ def main():
                        help="Validation file name")
     parser.add_argument("--no-eval", action="store_true", help="Skip evaluation")
     parser.add_argument("--use-ocr", action="store_true", help="Use OCR for PDFs")
+    parser.add_argument("--batch", action="store_true", help="Batch mode (minimal output)")
     parser.add_argument("--retrieve-propositions", action="store_true",
                        help="Retrieve propositions instead of chunks")
     
     args = parser.parse_args()
+    
+    # Initialize logger (batch mode = minimal output)
+    logger = ConsoleLogger("Proposition Chunking RAG", 14, verbose=True, batch_mode=args.batch)
     
     # Create embedding function early to avoid local scope issues
     embedding_fn = get_embedding_fn()
@@ -74,7 +81,7 @@ def main():
     # Discover documents
     documents = discover_documents(Path(args.data_dir))
     if not documents:
-        print(f"No documents found in {args.data_dir}")
+        logger.error(f"No documents found in {args.data_dir}")
         return
     
     # Load documents
@@ -150,22 +157,8 @@ def main():
             "response_length": len(response)
         })
     
-    # Print summary
-    print(f"\n{'='*70}")
-    print("SUMMARY")
-    print(f"{'='*70}")
-    print(f"Processed: {len(results)}/{num_queries} queries successfully")
-    print(f"Retrieval Mode: {retrieve_mode}")
-    print(f"Total Propositions: {len(proposition_embeddings)}")
-    print(f"Total Chunks: {len(chunks)}")
-    
-    if results:
-        avg_items = sum(r['items_count'] for r in results) / len(results)
-        print(f"Average items retrieved: {avg_items:.1f}")
-    
-    # Save results to tracker
+    # Save results to tracker and calculate metrics
     metrics = create_metrics_from_results(results)
-    metrics['total_propositions'] = len(proposition_embeddings)
     tracker = ResultsTracker()
     tracker.add_result(
         workflow_id="14",
@@ -174,11 +167,17 @@ def main():
     )
     tracker.save_results()
     
-    # Print workflow metrics only
-    print(f"\n[Workflow 14] Proposition Chunking RAG")
-    print(f"  Overall Score: {metrics.get('overall_score', '-'):.1f}/100")
-    print(f"  Valid Response Rate: {metrics.get('valid_response_rate', '-'):.1f}%")
-    print(f"  Queries Processed: {metrics.get('queries_processed', '-')}")
+    # Calculate execution time
+    total_time = time.time() - start_time
+    
+    # Print unified summary with only essential metrics
+    summary_formatter = UnifiedSummaryFormatter("Proposition Chunking RAG", 14)
+    summary = summary_formatter.format_summary(
+        queries_processed=len(results),
+        total_time=total_time,
+        metrics=metrics
+    )
+    print(summary)
 
 
 if __name__ == "__main__":

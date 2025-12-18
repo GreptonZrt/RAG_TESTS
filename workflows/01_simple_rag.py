@@ -14,6 +14,7 @@ Usage:
 import argparse
 import os
 import sys
+import time
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -30,10 +31,12 @@ from workflow_parts.orchestration import (
 )
 from workflow_parts.chunking import chunk_text_sliding_window
 from workflow_parts.retrieval import semantic_search
+from workflow_parts.output_formatter import UnifiedSummaryFormatter
 from workflow_parts.results_tracker import ResultsTracker, create_metrics_from_results
 
 
 def main():
+    start_time = time.time()
     parser = argparse.ArgumentParser(description="01 Simple RAG Workflow")
     parser.add_argument('--files', nargs='+', help='PDF/DOCX files to process (space-separated)')
     parser.add_argument('--pdf', help='(Deprecated) Single PDF file')
@@ -48,6 +51,7 @@ def main():
     parser.add_argument('--use-ocr', action='store_true', help='Enable OCR for image PDFs')
     parser.add_argument('--no-eval', action='store_true', help='Skip evaluation')
     parser.add_argument('--multi', action='store_true', help='Use multi-document validation file')
+    parser.add_argument("--batch", action="store_true", help="Batch mode (minimal output)")
     
     args = parser.parse_args()
     
@@ -137,17 +141,23 @@ def main():
     
     print_results(results)
     
-    # Track results
+    # Track results and calculate metrics
     metrics = create_metrics_from_results(results)
     tracker = ResultsTracker()
     tracker.add_result(workflow_id="01", workflow_name="Simple RAG", metrics=metrics)
     tracker.save_results()
     
-    # Print workflow metrics only
-    print(f"\n[Workflow 01] Simple RAG")
-    print(f"  Overall Score: {metrics.get('overall_score', '-'):.1f}/100")
-    print(f"  Valid Response Rate: {metrics.get('valid_response_rate', '-'):.1f}%")
-    print(f"  Queries Processed: {metrics.get('queries_processed', '-')}")
+    # Calculate execution time
+    total_time = time.time() - start_time
+    
+    # Print unified summary with only essential metrics
+    summary_formatter = UnifiedSummaryFormatter("Simple RAG", 1)
+    summary = summary_formatter.format_summary(
+        queries_processed=len(results),
+        total_time=total_time,
+        metrics=metrics
+    )
+    print(summary)
     
     return 0
 
