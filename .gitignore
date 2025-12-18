@@ -47,6 +47,11 @@ Thumbs.db
 # Project specific
 RAG_Notebooks/
 data_temp/
+*.log
+error_debug_*.txt
+.pytest_cache/
+.coverage
+htmlcov/
 *.pdf
 *.docx
 workflow_results.csv
